@@ -35,10 +35,10 @@ from pathlib import Path
 # --------------------------------------------------------------------------- #
 
 ARCHIVE = {
-    # file_id из ссылки на архив с моделями и кэшами
-    "id": "REPLACE_WITH_GOOGLE_DRIVE_FILE_ID",
-    # ожидаемый размер после распаковки, МБ — защита от недокачанного файла
-    "size_mb": 4500,
+    # file_id из ссылки https://drive.google.com/file/d/<FILE_ID>/view
+    "id": "1cA8a6NxBdMsByKRrRVqRXqUg5sm5st4x",
+    # ожидаемый размер архива, МБ — защита от недокачанного файла
+    "size_mb": 3743,
 }
 
 # Ожидаемое содержимое после распаковки: путь -> минимальный размер, МБ
@@ -66,7 +66,11 @@ EXPECTED_DIRS = {
     "emb_cache": 20,
 }
 
-GDrive = "https://drive.google.com/uc?export=download&id="
+GDrive = "https://drive.usercontent.google.com/download?export=download&confirm=t&id="
+# Почему не обычный https://drive.google.com/uc?export=download&id=... :
+# для файлов больше ~100 МБ Google отдаёт HTML-страницу с подтверждением вместо
+# файла (проверено: ответ 303 -> text/html). Хост usercontent.google.com с
+# confirm=t отдаёт сразу application/octet-stream.
 
 
 def human(n: int) -> str:
