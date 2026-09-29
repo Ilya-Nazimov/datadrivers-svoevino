@@ -1,0 +1,28 @@
+# Whitelist-подход: в контекст сборки попадает только то, что реально копирует Dockerfile.
+# Без этого в Docker улетает весь проект (~12 ГБ: .venv, images_masked, keypoint_cache_clahe, ...).
+#
+# Важно: паттерн `*` матчит только верхний уровень, поэтому после `!runs/` вложенные
+# пути под него не попадают и включаются автоматически. Поэтому для runs/ нужны явные
+# исключения `runs/**` + точечные пере-включения (правило: последнее совпавшее правило выигрывает).
+*
+!Dockerfile
+!app.py
+!siglip_negative_train.py
+!prefetch_models.py
+!requirements.txt
+!yolov8x-worldv2.pt
+!wine.csv
+!images/
+!keypoint_cache/
+!ocr_cache/
+!emb_cache/
+!runs/
+
+# runs/ целиком (8.2 ГБ) — оставляем только 3 чекпоинта из app.py:78-80
+runs/**
+!runs/wine_v2/
+!runs/wine_v2/best.pt
+!runs/siglip_enhanced_old/
+!runs/siglip_enhanced_old/siglip_enhanced_last.pth
+!runs/siglip_reranker/
+!runs/siglip_reranker/final_model.pth

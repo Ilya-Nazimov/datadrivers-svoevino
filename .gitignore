@@ -1,0 +1,82 @@
+# ============================================================================
+#  В репозиторий попадает ТОЛЬКО то, что нужно для инференса.
+#  Файлы обучения и прошлых экспериментов исключены, но НЕ удалены с диска —
+#  git add -f / локальные копии работают как раньше.
+# ============================================================================
+
+# ---------- Python: только 4 файла, реально нужные для работы ----------
+# ВАЖНО: комментарии в .gitignore допустимы ТОЛЬКО отдельной строкой.
+# `#` в конце строки считается частью паттерна, и правило молча перестаёт работать.
+*.py
+!app.py
+!siglip_negative_train.py
+!build_caches.py
+!prefetch_models.py
+!fetch_assets.py
+
+# ---------- модели и кэши: в git НЕ хранятся ----------
+# Всё это (~4.4 ГБ) лежит в облачном хранилище, в репозитории только fetch_assets.py
+# со ссылками. Хранить бинарные чекпоинты в git бессмысленно: они не диффятся,
+# каждый клон тянет гигабайты, а история раздувается навсегда.
+runs/
+yolov8x-worldv2.pt
+keypoint_cache/
+emb_cache/
+ocr_cache/
+weights/
+images/
+
+# Служебное для загрузки ассетов
+assets.tar.gz
+*.tar.gz
+
+# ---------- таблицы: только wine.csv и images_match.csv ----------
+*.csv
+!wine.csv
+!images/images_match.csv
+
+# ---------- json: только кэш OCR ----------
+*.json
+!ocr_cache/*.json
+
+# ---------- окружения и служебное ----------
+.venv/
+.venv-verify/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+debug.txt
+*.db
+*.html
+.idea/
+
+# ---------- каталоги обучения, экспериментов и дубли кэшей ----------
+backgrounds/
+hard_cases_analysis/
+images_masked/
+images_test/
+scripts/
+test_images/
+test_images_A/
+top1_errors_analysis/
+wine_retrieval/
+weights/
+keypoint_cache_clahe/
+keypoint_cache_clahe_clahe/
+yolo_crops_cache/
+eval_errors_images/
+
+# ---------- конфиги dev-окружения, не нужные для инференса ----------
+# pyproject.toml требует python>=3.12 и тянет mlx/paddleocr — это окружение для
+# обучения, а не для запуска сервиса. Путать проверяющего не нужно.
+pyproject.toml
+uv.lock
+config.yaml
+
+# вспомогательный скрипт внутренней проверки репозитория
+check_repo.sh
+
+# Результат прогона организатора. Если он окажется в клоне, participant_test.sh
+# прервётся с "output already exists" (строка 68) — проверяющий не сможет запустить.
+eval/predictions.jsonl
